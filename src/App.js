@@ -7,10 +7,14 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Login from './Login';
+import BestBooks from './BestBooks';
+import Profile from './Profile'
 
 class App extends React.Component {
 
   render() {
+    const isAuthenticated  = this.props.auth0;
     console.log('app', this.props);
     return(
       <>
@@ -19,9 +23,12 @@ class App extends React.Component {
             <Header />
             <Switch>
               <Route exact path="/">
-                {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
+                {isAuthenticated && <BestBooks/>}
+                {!isAuthenticated && <Login/>}
               </Route>
-              {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+              <Route exact path="/profile">
+                  <Profile/>
+                </Route>          
             </Switch>
             <Footer />
           </IsLoadingAndError>
