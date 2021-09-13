@@ -10,11 +10,12 @@ import {
 import Login from './Login';
 import BestBooks from './BestBooks';
 import Profile from './Profile'
+import { withAuth0 } from "@auth0/auth0-react";
 
 class App extends React.Component {
 
   render() {
-    const isAuthenticated  = this.props.auth0;
+    const {isAuthenticated}  = this.props.auth0;
     console.log('app', this.props);
     return(
       <>
@@ -23,8 +24,7 @@ class App extends React.Component {
             <Header />
             <Switch>
               <Route exact path="/">
-                {isAuthenticated && <BestBooks/>}
-                {!isAuthenticated && <Login/>}
+            {isAuthenticated ?  <BestBooks/>: <Login/>}
               </Route>
               <Route exact path="/profile">
                   <Profile/>
@@ -38,4 +38,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withAuth0(App);
