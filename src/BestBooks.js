@@ -13,14 +13,17 @@ class MyFavoriteBooks extends React.Component {
     };
   }
   componentDidMount = () => {
-    const URL = "http://localhost:3010/books";
+    const {user}=this.props.auth0;
+    const email=user.email;
+    const URL = `http://localhost:3010/books?email=${email}`;
     axios
       .get(URL)
       .then((result) => {
+        console.log(result);
         this.setState({
           BookArray: result.data,
         });
-        // console.log(this.state.BookArray);
+        console.log(this.state.BookArray);
       })
       .catch((err) => {
         console.log("Error");
