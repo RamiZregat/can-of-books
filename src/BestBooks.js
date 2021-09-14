@@ -18,7 +18,7 @@ class MyFavoriteBooks extends React.Component {
   componentDidMount = () => {
     const { user } = this.props.auth0;
     const email = user.email;
-    const URL = `http://localhost:3010/books?email=${email}`;
+    const URL = `https://rami-can-of-books.herokuapp.com/books?email=${email}`;
     axios
       .get(URL)
       .then((result) => {
@@ -44,7 +44,7 @@ class MyFavoriteBooks extends React.Component {
       email:email
     }
     await axios
-    .post('http://localhost:3010/addbooks',obj)
+    .post('https://rami-can-of-books.herokuapp.com/addbooks',obj)
     .then(result=>{
       this.setState({
         BookArray:result.data
@@ -60,7 +60,7 @@ class MyFavoriteBooks extends React.Component {
     const { user } = this.props.auth0;
     const email = user.email;
     await axios
-    .delete(`http://localhost:3010/deletebooks/${id}?email=${email}`)
+    .delete(`https://rami-can-of-books.herokuapp.com/deletebooks/${id}?email=${email}`)
     .then(result=>{
       this.setState({
         BookArray:result.data
