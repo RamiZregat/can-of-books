@@ -7,7 +7,7 @@ class BookFormModal extends React.Component {
     return (
 
         <Modal.Dialog>
-  <Modal.Header closeButton>
+  <Modal.Header closeButton onClick={()=>this.props.handleCloseModel()}>
     <Modal.Title>New Book</Modal.Title>
   </Modal.Header>
 
@@ -33,13 +33,12 @@ class BookFormModal extends React.Component {
         <label for="status">Status:</label>
   </Modal.Body>
         <select id="status" name="status">
-          <option value="On stock">On stock</option>
+          <option value="In stock">In stock</option>
           <option value="Out of stock">Out of stock</option>
           
         </select>
   <Modal.Footer>
-
-        <input type="submit" value="Add" />
+        <Button type="submit">Add</Button>
         
   </Modal.Footer>
   </fieldset>

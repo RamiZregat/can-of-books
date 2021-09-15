@@ -6,6 +6,9 @@ import { withAuth0 } from "@auth0/auth0-react";
 import BookItem from "./BookItems";
 import BookFormModal from './BookFormModal'
 import Row from "react-bootstrap/Row";
+import UpdateForm from './UpdateForm'
+import Button from "react-bootstrap/Button";
+
 
 class MyFavoriteBooks extends React.Component {
   constructor(props) {
@@ -13,8 +16,16 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       BookArray: [],
       showModel:false,
+      showFlag:false,
+      title:'',
+      description:'',
+      status:'',
+      id:''
     };
+
+ 
   }
+  
   componentDidMount = () => {
     const { user } = this.props.auth0;
     const email = user.email;
@@ -34,7 +45,7 @@ class MyFavoriteBooks extends React.Component {
   };
 
   addBook= async(event)=>{
-    // event.preventDefault();
+    event.preventDefault();
     const { user } = this.props.auth0;
     const email = user.email;
     const obj={
@@ -47,13 +58,17 @@ class MyFavoriteBooks extends React.Component {
     .post('https://rami-can-of-books.herokuapp.com/addbooks',obj)
     .then(result=>{
       this.setState({
-        BookArray:result.data
+        BookArray:result.data,
+        showModel:false,
+
       })
       console.log(result.data);
+      
     })
     .catch(err=>{
       console.log(err);
     })
+    
   }
 
   deleteBook= async(id)=>{
@@ -72,23 +87,78 @@ class MyFavoriteBooks extends React.Component {
     })
   }
 
+  updateBook=async(event)=>{
+    event.preventDefault();
+    const{user}=this.props.auth0;
+    const email=user.email;
+    const obj={
+      title:event.target.title.value,
+      description:event.target.description.value,
+      status:event.target.status.value,
+      email:email,
+    }
+    await axios
+    .put(`https://rami-can-of-books.herokuapp.com/updatebooks/${this.state.id}`,obj)
+    .then(result=>{
+      this.setState({
+        BookArray:result.data,
+        showFlag:false
+      })
+    })
+    .catch(err=>{
+      console.log("Error on updating");
+    })
+  }
+  
+
+  handleCloseModel=()=>{
+      this.setState({
+        showModel:false,
+      })
+  }
+  handleOpenModel=()=>{
+      this.setState({
+        showModel:true,
+      })
+  }
+  handleClose=()=>{
+      this.setState({
+        showFlag:false,
+      })
+  }
+  handleOpen=(item)=>{
+      this.setState({
+        showFlag:true,
+        title:item.title,
+        description:item.description,
+        status:item.status,
+        id:item._id,
+      })
+  }
+
   render() {
     return (
       <>
         <div className={"textDiv"}>
           <h1>My Favorite Books</h1>
-          <button onClick={()=>{
-            this.setState({
-              showModel:true
-            })}}>Add Book</button>
-            {this.state.showModel && <BookFormModal showModel={this.state.showModel} addBook={this.addBook}/> }
+          <Button onClick={()=>this.handleOpenModel()}>Add Book</Button>
+            {this.state.showModel && <BookFormModal handleCloseModel={this.handleCloseModel}  showModel={this.state.showModel} addBook={this.addBook}/> }
           <p>This is a collection of my favorite books</p>
         </div>
         <Row xs={1} md={3} className="g-4">
         {this.state.BookArray.map((item) => {
-          return <BookItem item={item} deleteBook={this.deleteBook} />;
+          return <BookItem  handleOpen={this.handleOpen} item={item} deleteBook={this.deleteBook} />;
         })}
         </Row>
+        <UpdateForm
+        show={this.state.showFlag}
+        handleClose={this.handleClose}
+        title={this.state.title}
+        description={this.state.description}
+        status={this.state.status}
+        id={this.state.id}
+        updateBook={this.updateBook}
+        />
       </>
     );
   }
