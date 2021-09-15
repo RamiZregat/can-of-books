@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
 class BookItem extends React.Component {
   render() {
@@ -18,7 +19,8 @@ class BookItem extends React.Component {
           </Card.Body>
           <ListGroup className="list-group-flush">
             <ListGroupItem>Status: {this.props.item.status}</ListGroupItem>
-            <button onClick={()=>this.props.deleteBook(this.props.item._id)}>Delete</button>
+            <ListGroupItem><Button onClick={()=>this.props.deleteBook(this.props.item._id)}>Delete</Button></ListGroupItem>
+            <ListGroupItem><Button onClick={()=>{this.props.handleOpen(this.props.item)}}>Update</Button></ListGroupItem>
           </ListGroup>
         </Card>
         </Col>
