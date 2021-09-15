@@ -98,7 +98,7 @@ class MyFavoriteBooks extends React.Component {
       email:email,
     }
     await axios
-    .put(`http://localhost:3010/updatebooks/${this.state.id}`,obj)
+    .put(`https://rami-can-of-books.herokuapp.com/updatebooks/${this.state.id}`,obj)
     .then(result=>{
       this.setState({
         BookArray:result.data,
